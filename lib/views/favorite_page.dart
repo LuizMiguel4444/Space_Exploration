@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, deprecated_member_use, sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -58,12 +60,12 @@ class FavoritePage extends StatelessWidget {
           final locale = Get.locale?.languageCode ?? 'en';
           if (favoriteController.isGridLayout.value) {
             return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
               ),
-              padding: EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
               itemCount: favoriteImages.length,
               itemBuilder: (context, index) {
                 final image = favoriteImages[index];
@@ -84,7 +86,7 @@ class FavoritePage extends StatelessWidget {
                           backgroundColor: Colors.black45,
                           title: Text(image.title),
                           trailing: IconButton(
-                            icon: Icon(Icons.delete, color: Colors.grey),
+                            icon: const Icon(Icons.delete, color: Colors.grey),
                             onPressed: () {
                               favoriteController.removeFavorite(image);
                             },
@@ -107,7 +109,7 @@ class FavoritePage extends StatelessWidget {
                           },
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            return Icon(Icons.error);
+                            return const Icon(Icons.error);
                           },
                         ),
                       ),
@@ -123,14 +125,14 @@ class FavoritePage extends StatelessWidget {
                 final image = favoriteImages[index];
                 final formattedDate = DateFormat.yMMMMd(locale).format(DateTime.parse(image.date));
                 return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   elevation: 8,
                   color: Theme.of(context).brightness == Brightness.dark ? null : Colors.grey[300],
                   child: ListTile(
-                    contentPadding: EdgeInsets.all(8.0),
+                    contentPadding: const EdgeInsets.all(8.0),
                     leading: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -157,18 +159,18 @@ class FavoritePage extends StatelessWidget {
                             );
                           },
                           errorBuilder: (context, error, stackTrace) {
-                            return Icon(Icons.error, size: 100);
+                            return const Icon(Icons.error, size: 100);
                           },
                         ),
                       ],
                     ),
                     title: Text(
                       image.title,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(formattedDate),
                     trailing: IconButton(
-                      icon: Icon(Icons.delete),
+                      icon: const Icon(Icons.delete),
                       onPressed: () {
                         favoriteController.removeFavorite(image);
                       },

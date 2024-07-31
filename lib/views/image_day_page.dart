@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -79,7 +81,7 @@ class ImageDayPage extends StatelessWidget {
           } else if (imageDayController.imageOfTheDay.value.imageUrl.isEmpty) {
             return Center(
                 child: Text('noImageForToday'.tr,
-                    style: TextStyle(fontWeight: FontWeight.bold)));
+                    style: const TextStyle(fontWeight: FontWeight.bold)));
           } else {
             final image = imageDayController.imageOfTheDay.value;
             final locale = Get.locale?.languageCode ?? 'en';
@@ -104,12 +106,12 @@ class ImageDayPage extends StatelessWidget {
                 // Content
                 SingleChildScrollView(
                   child: Padding(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.all(16.0),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(12.0),
@@ -118,7 +120,7 @@ class ImageDayPage extends StatelessWidget {
                                 color: Colors.black.withOpacity(0.2),
                                 spreadRadius: 2,
                                 blurRadius: 5,
-                                offset: Offset(0, 3),
+                                offset: const Offset(0, 3),
                               ),
                             ],
                           ),
@@ -166,55 +168,55 @@ class ImageDayPage extends StatelessWidget {
                                         fit: BoxFit.cover,
                                         errorBuilder:
                                             (context, error, stackTrace) {
-                                          return Icon(Icons.error);
+                                          return const Icon(Icons.error);
                                         },
                                       ),
                                     ),
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 16),
+                              const SizedBox(height: 16),
                               Text(
                                 image.title,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 formattedDate,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.grey,
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Row(
                                 children: [
-                                  Icon(Icons.travel_explore, color: Colors.grey),
-                                  SizedBox(width: 4),
+                                  const Icon(Icons.travel_explore, color: Colors.grey),
+                                  const SizedBox(width: 4),
                                   Text(
                                     "clickToZoom".tr,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                         fontSize: 16, color: Colors.grey),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 16),
+                              const SizedBox(height: 16),
                               Text(
                                 "description".tr,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 image.description,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                   color: Colors.black,
                                 ),

@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -144,7 +146,11 @@ class DataService {
     final prefs = await SharedPreferences.getInstance();
     final cacheString = prefs.getString('translationCache');
     if (cacheString != null) {
-      _translationCache = Map<String, Map<String, String>>.from(jsonDecode(cacheString));
+      final Map<String, dynamic> jsonMap = jsonDecode(cacheString);
+      _translationCache = jsonMap.map((key, value) {
+        final Map<String, String> innerMap = Map<String, String>.from(value);
+        return MapEntry(key, innerMap);
+      });
     }
   }
 

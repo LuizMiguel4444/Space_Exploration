@@ -7,12 +7,14 @@ import '../controllers/space_controller.dart';
 import '../controllers/navBar_controller.dart';
 import '../controllers/theme_controller.dart';
 import '../controllers/favorite_controller.dart';
+import '../controllers/language_controller.dart';
 import '../data/dataService.dart';
 import '../models/nasa_image.dart';
 import 'image_details_page.dart';
 import 'favorite_page.dart';
 import 'image_day_page.dart';
 
+// ignore: use_key_in_widget_constructors
 class HomePage extends StatelessWidget {
   final SpaceController controller = Get.put(SpaceController());
   final ThemeController themeController = Get.put(ThemeController());
@@ -48,15 +50,15 @@ class HomePage extends StatelessWidget {
             Get.to(() => FavoritePage());
           }
         },
-        icons: [
+        icons: const [
           Icons.today,
           Icons.public,
           Icons.star,
         ],
         iconColors: [
-          Color.fromARGB(255, 255, 0, 0),
+          const Color.fromARGB(255, 255, 0, 0),
           Theme.of(context).brightness == Brightness.dark ? customSwatchSecundary : customSwatch,
-          Color.fromARGB(255, 255, 220, 0),
+          const Color.fromARGB(255, 255, 220, 0),
         ],
         labels: ["today".tr, "home".tr, "favorites".tr],
       ),
@@ -68,6 +70,7 @@ class MyNewAppBar extends StatelessWidget implements PreferredSizeWidget {
   final SpaceController spaceController = Get.put(SpaceController());
   final ThemeController themeController = Get.find<ThemeController>();
 
+  // ignore: use_key_in_widget_constructors
   MyNewAppBar();
 
   @override
@@ -75,7 +78,7 @@ class MyNewAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: Theme.of(context).brightness == Brightness.dark ? customSwatchSecundary : customSwatch,
       leading: IconButton(
-        icon: Icon(Icons.refresh),
+        icon: const Icon(Icons.refresh),
         color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
         onPressed: () {
           spaceController.fetchNasaImages();
@@ -117,14 +120,15 @@ class MyNewAppBar extends StatelessWidget implements PreferredSizeWidget {
             spaceController.isTranslating.value = true;
             try {
               if (value == 'en') {
-                Get.updateLocale(Locale('en', 'US'));
+                Get.updateLocale(const Locale('en', 'US'));
                 Get.find<FavoriteController>().updateLanguage('en');
                 await spaceController.updateLanguage('en');
               } else if (value == 'pt') {
-                Get.updateLocale(Locale('pt', 'BR'));
+                Get.updateLocale(const Locale('pt', 'BR'));
                 Get.find<FavoriteController>().updateLanguage('pt');
                 await spaceController.updateLanguage('pt');
               }
+              await LanguageService.saveLanguageCode(value);
             } finally {
               spaceController.isTranslating.value = false;
             }
@@ -154,6 +158,7 @@ class MyNewAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
+// ignore: use_key_in_widget_constructors
 class MainLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -180,16 +185,17 @@ class MainLayout extends StatelessWidget {
                 final image = nasaImages[index];
                 final locale = Get.locale?.languageCode ?? 'en';
                 final formattedDate = DateFormat.yMMMMd(locale).format(DateTime.parse(image.date));
+                // ignore: avoid_print
                 print(image.imageUrl);
                 return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   elevation: 8,
                   color: Theme.of(context).brightness == Brightness.dark ? null : Colors.grey[300],
                   child: ListTile(
-                    contentPadding: EdgeInsets.all(8.0),
+                    contentPadding: const EdgeInsets.all(8.0),
                     leading: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -202,6 +208,7 @@ class MainLayout extends StatelessWidget {
                             if (progress == null) {
                               return child;
                             }
+                            // ignore: sized_box_for_whitespace
                             return Container(
                               width: 100,
                               height: 100,
@@ -216,14 +223,14 @@ class MainLayout extends StatelessWidget {
                             );
                           },
                           errorBuilder: (context, error, stackTrace) {
-                            return Icon(Icons.error, size: 100);
+                            return const Icon(Icons.error, size: 100);
                           },
                         ),
                       ],
                     ),
                     title: Text(
                       image.title,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(formattedDate),
                     onTap: () {
@@ -236,12 +243,13 @@ class MainLayout extends StatelessWidget {
           case TableStatus.error:
             return Center(child: Text("errorLoadingData".tr));
         }
-        return Center(child: Text(""));
+        return const Center(child: Text(""));
       },
     );
   }
 }
 
+// ignore: use_key_in_widget_constructors
 class SecundaryLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -263,15 +271,16 @@ class SecundaryLayout extends StatelessWidget {
           case TableStatus.ready:
             var nasaImages = value['dataObjects'] as List<NasaImage>;
             return GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
               ),
-              padding: EdgeInsets.all(25),
+              padding: const EdgeInsets.all(25),
               itemCount: nasaImages.length,
               itemBuilder: (context, index) {
                 final image = nasaImages[index];              
+                // ignore: avoid_print
                 print(image.imageUrl);
                 return GestureDetector(
                   onTap: () {
@@ -307,7 +316,7 @@ class SecundaryLayout extends StatelessWidget {
                           },
                           fit: BoxFit.cover,
                           errorBuilder: (context, error, stackTrace) {
-                            return Icon(Icons.error);
+                            return const Icon(Icons.error);
                           },
                         ),
                       ),
@@ -319,7 +328,7 @@ class SecundaryLayout extends StatelessWidget {
           case TableStatus.error:
             return Center(child: Text("errorLoadingData".tr));
         }
-        return Center(child: Text(""));
+        return const Center(child: Text(""));
       },
     );
   }
@@ -331,7 +340,8 @@ class NewNavBar extends HookWidget {
   final List<Color> iconColors;
   final List<String> labels;
 
-  NewNavBar({
+  // ignore: use_key_in_widget_constructors
+  const NewNavBar({
     required this.icons,
     required this.iconColors,
     required this.labels,
@@ -357,8 +367,8 @@ class NewNavBar extends HookWidget {
         currentIndex: navBarController.currentIndex.value,
         selectedItemColor: Theme.of(context).brightness == Brightness.dark ? customSwatchSecundary : customSwatch,
         elevation: 15,
-        selectedIconTheme: IconThemeData(size: 32),
-        unselectedIconTheme: IconThemeData(size: 25),
+        selectedIconTheme: const IconThemeData(size: 32),
+        unselectedIconTheme: const IconThemeData(size: 25),
         items: List.generate(icons.length, (index) {
           return BottomNavigationBarItem(
             icon: Container(

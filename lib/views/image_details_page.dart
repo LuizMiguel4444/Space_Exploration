@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -64,12 +66,12 @@ class ImageDetailsPage extends StatelessWidget {
           // Conteúdo
           SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(16.0),
+                    padding: const EdgeInsets.all(16.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(12.0),
@@ -78,7 +80,7 @@ class ImageDetailsPage extends StatelessWidget {
                           color: Colors.black.withOpacity(0.2),
                           spreadRadius: 2,
                           blurRadius: 5,
-                          offset: Offset(0, 3),
+                          offset: const Offset(0, 3),
                         ),
                       ],
                     ),
@@ -119,54 +121,54 @@ class ImageDetailsPage extends StatelessWidget {
                                   },
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) {
-                                    return Icon(Icons.error);
+                                    return const Icon(Icons.error);
                                   },
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Text(
                           image.title,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           formattedDate,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Colors.grey,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Row(
                           children: [
-                            Icon(Icons.travel_explore, color: Colors.grey),
-                            SizedBox(width: 4),
+                            const Icon(Icons.travel_explore, color: Colors.grey),
+                            const SizedBox(width: 4),
                             Text(
                               "clickToZoom".tr,
-                              style: TextStyle(fontSize: 16, color: Colors.grey),
+                              style: const TextStyle(fontSize: 16, color: Colors.grey),
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
+                        const SizedBox(height: 16),
                         Text(
                           "description".tr,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: Colors.black,
                           ),
                         ),
-                        SizedBox(height: 8),
+                        const SizedBox(height: 8),
                         Text(
                           image.description,
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 16,
                             color: Colors.black,
                           ),
@@ -187,7 +189,7 @@ class ImageDetailsPage extends StatelessWidget {
 class ImageZoomPage extends StatelessWidget {
   final NasaImage image;
 
-  ImageZoomPage({required this.image});
+  const ImageZoomPage({required this.image});
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +208,7 @@ class ImageZoomPage extends StatelessWidget {
                   image.imageUrl,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) {
-                    return Icon(Icons.error, color: Colors.white);
+                    return const Icon(Icons.error, color: Colors.white);
                   },
                 ),
               ),
@@ -216,7 +218,7 @@ class ImageZoomPage extends StatelessWidget {
             top: 16,
             left: 16,
             child: IconButton(
-              icon: Icon(Icons.arrow_back, color: Colors.grey),
+              icon: const Icon(Icons.arrow_back, color: Colors.grey),
               onPressed: () {
                 Navigator.pop(context);
               },
