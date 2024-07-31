@@ -34,11 +34,13 @@ class HomePage extends StatelessWidget {
             ),
           );
         }
-        if (themeController.isGridLayout.value) {
-          return SecundaryLayout();
-        } else {
-          return MainLayout();
-        }
+        return RefreshIndicator(
+          onRefresh: () async {
+            await Future.delayed(const Duration(seconds: 1));
+            await controller.fetchNasaImages();
+          },
+          child: themeController.isGridLayout.value ? SecundaryLayout() : MainLayout(),
+        );
       }),
       bottomNavigationBar: NewNavBar(
         itemSelectedCallback: (index) {
