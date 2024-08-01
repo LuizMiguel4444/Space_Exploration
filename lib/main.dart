@@ -14,13 +14,24 @@ import 'controllers/language_controller.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(const SplashScreen());
+
+  final results = await Future.wait([
+    initializeControllers(),
+    LanguageService.getLanguageCode(),
+  ]);
+
+  String? savedLanguageCode = results[1] as String?;
+  Locale initialLocale = Locale(savedLanguageCode ?? 'en', 'US');
+
+  runApp(MyApp(initialLocale: initialLocale));
+}
+
+Future<void> initializeControllers() async {
   final ThemeController themeController = Get.put(ThemeController());
   await themeController.loadPreferences();
-  String? savedLanguageCode = await LanguageService.getLanguageCode();
-  Locale initialLocale = Locale(savedLanguageCode ?? 'en', 'US');
+  
   SpaceController spaceController = Get.put(SpaceController());
   await spaceController.fetchNasaImages();
-  runApp(MyApp(initialLocale: initialLocale));
 }
 
 class MyApp extends StatelessWidget {
