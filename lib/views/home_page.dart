@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import '../controllers/space_controller.dart';
 import '../controllers/navBar_controller.dart';
 import '../controllers/theme_controller.dart';
@@ -18,51 +18,76 @@ import 'image_day_page.dart';
 class HomePage extends StatelessWidget {
   final SpaceController controller = Get.put(SpaceController());
   final ThemeController themeController = Get.put(ThemeController());
+  final NotchBottomBarController notchBottomBarController = NotchBottomBarController(index: 1);
+  final void Function(int)? itemSelectedCallback;
+
+  HomePage({super.key, this.itemSelectedCallback});
 
   @override
   Widget build(BuildContext context) {
+    // ignore: prefer_typing_uninitialized_variables
     return Scaffold(
       appBar: MyNewAppBar(),
       body: Obx(() {
-        if (controller.isLoading.value || controller.isTranslating.value) {
-          return Center(
+        return RefreshIndicator(
+          onRefresh: () async {
+            await Future.delayed(const Duration(seconds: 1));
+            await controller.fetchNasaImages();
+          },
+          child: controller.isLoading.value || controller.isTranslating.value ? Center(
             child: Lottie.asset(
               'assets/loading.json',
               width: 400,
               height: 500,
               fit: BoxFit.fill,
             ),
-          );
-        }
-        return RefreshIndicator(
-          onRefresh: () async {
-            await Future.delayed(const Duration(seconds: 1));
-            await controller.fetchNasaImages();
-          },
-          child: themeController.isGridLayout.value ? SecundaryLayout() : MainLayout(),
+          ) : themeController.isGridLayout.value ? SecundaryLayout() : MainLayout(),
         );
       }),
-      bottomNavigationBar: NewNavBar(
-        itemSelectedCallback: (index) {
+      extendBody: true,
+      bottomNavigationBar: AnimatedNotchBottomBar(
+        notchBottomBarController: notchBottomBarController,
+        onTap: (index) async {
+          if (navBarController.currentIndex.value == 1 && index == 1) {
+            return;
+          }
+          navBarController.currentIndex.value = index;
+          itemSelectedCallback?.call(index);
           if (index == 0) {
+            await Future.delayed(const Duration(milliseconds: 320));
             Get.to(() => ImageDayPage());
           } else if (index == 1 && Get.currentRoute != '/') {
             Get.offAll(HomePage());
           } else if (index == 2) {
+            await Future.delayed(const Duration(milliseconds: 320));
             Get.to(() => FavoritePage());
           }
         },
-        icons: const [
-          Icons.today,
-          Icons.public,
-          Icons.star,
+        bottomBarItems: [
+          BottomBarItem(
+            activeItem: const Icon(Icons.today, color: Color.fromARGB(255, 255, 0, 0)),
+            inActiveItem: const Icon(Icons.today, color: Colors.grey),
+            itemLabel: "today".tr,
+          ),
+          BottomBarItem(
+            activeItem: Icon(Icons.public, color: Theme.of(context).brightness == Brightness.dark ? customSwatchSecundary : customSwatch),
+            inActiveItem: const Icon(Icons.public, color: Colors.grey),
+            itemLabel: "home".tr,
+          ),
+          BottomBarItem(
+            activeItem: const Icon(Icons.star, color: Color.fromARGB(255, 255, 220, 0)),
+            inActiveItem: const Icon(Icons.star, color: Colors.grey),
+            itemLabel: "favorites".tr,
+          ),
         ],
-        iconColors: [
-          const Color.fromARGB(255, 255, 0, 0),
-          Theme.of(context).brightness == Brightness.dark ? customSwatchSecundary : customSwatch,
-          const Color.fromARGB(255, 255, 220, 0),
-        ],
-        labels: ["today".tr, "home".tr, "favorites".tr],
+        color: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
+        showLabel: false,
+        blurOpacity: 0.75,
+        blurFilterX: 10.0,
+        blurFilterY: 20.0,
+        kIconSize: 24,
+        kBottomRadius: 32,
+        notchColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
       ),
     );
   }
@@ -333,57 +358,5 @@ class SecundaryLayout extends StatelessWidget {
         return const Center(child: Text(""));
       },
     );
-  }
-}
-
-class NewNavBar extends HookWidget {
-  final void Function(int)? itemSelectedCallback;
-  final List<IconData> icons;
-  final List<Color> iconColors;
-  final List<String> labels;
-
-  // ignore: use_key_in_widget_constructors
-  const NewNavBar({
-    required this.icons,
-    required this.iconColors,
-    required this.labels,
-    this.itemSelectedCallback,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    assert(icons.length == labels.length && icons.length == iconColors.length);
-
-    return Obx(() {
-      return BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        onTap: (index) {
-          if (navBarController.currentIndex.value == 1 && index == 1) {
-            return;
-          }
-          navBarController.currentIndex.value = index;
-          itemSelectedCallback?.call(index);
-        },
-        currentIndex: navBarController.currentIndex.value,
-        selectedItemColor: Theme.of(context).brightness == Brightness.dark ? customSwatchSecundary : customSwatch,
-        elevation: 15,
-        selectedIconTheme: const IconThemeData(size: 32),
-        unselectedIconTheme: const IconThemeData(size: 25),
-        items: List.generate(icons.length, (index) {
-          return BottomNavigationBarItem(
-            icon: Container(
-              margin: EdgeInsets.only(top: index == navBarController.currentIndex.value ? 0 : 10),
-              child: Icon(
-                icons[index],
-                color: iconColors[index]
-              ),
-            ),
-            label: labels[index],
-          );
-        }),
-      );
-    });
   }
 }
