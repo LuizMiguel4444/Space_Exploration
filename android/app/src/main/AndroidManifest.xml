@@ -1,6 +1,7 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.br.space_exploration">
     <application
-        android:label="nasa_project"
+        android:label="Space Exploration"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
