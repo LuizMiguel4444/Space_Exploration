@@ -65,7 +65,7 @@ class FavoritePage extends StatelessWidget {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
               ),
-              padding: const EdgeInsets.all(25),
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 100),
               itemCount: favoriteImages.length,
               itemBuilder: (context, index) {
                 final image = favoriteImages[index];
@@ -78,6 +78,7 @@ class FavoritePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     elevation: 12,
+                    shadowColor: Theme.of(context).brightness == Brightness.dark ? Colors.grey[700] : null,
                     color: Theme.of(context).brightness == Brightness.dark ? null : Colors.grey[300],
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(15),
@@ -130,6 +131,7 @@ class FavoritePage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   elevation: 8,
+                  shadowColor: Theme.of(context).brightness == Brightness.dark ? Colors.grey[500] : null,
                   color: Theme.of(context).brightness == Brightness.dark ? null : Colors.grey[300],
                   child: ListTile(
                     contentPadding: const EdgeInsets.all(8.0),

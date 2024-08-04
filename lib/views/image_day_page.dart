@@ -18,11 +18,11 @@ class ImageDayPage extends StatelessWidget {
   final ImageDayController imageDayController = Get.put(ImageDayController());
   final FavoriteController favoriteController = Get.find<FavoriteController>();
 
-  Future<void> _downloadImage(String imageUrl, String imageTitle) async {
+  Future<void> _downloadImage(String imageUrlHD, String imageTitle) async {
     try {
       // Baixe a imagem
       var response = await Dio().get(
-        imageUrl,
+        imageUrlHD,
         options: Options(responseType: ResponseType.bytes),
       );
 
@@ -74,7 +74,7 @@ class ImageDayPage extends StatelessWidget {
           actions: [
             Obx(() {
               if (imageDayController.isLoading.value ||
-                  imageDayController.imageOfTheDay.value.imageUrl.isEmpty) {
+                  imageDayController.imageOfTheDay.value.imageUrlHD.isEmpty) {
                 return Container();
               } else {
                 final image = imageDayController.imageOfTheDay.value;
@@ -100,7 +100,7 @@ class ImageDayPage extends StatelessWidget {
                     ),
                     IconButton(
                       icon: Icon(Icons.download, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
-                      onPressed: () => _downloadImage(image.imageUrl, image.title),
+                      onPressed: () => _downloadImage(image.imageUrlHD, image.title),
                     ),
                   ],
                 );
@@ -118,7 +118,7 @@ class ImageDayPage extends StatelessWidget {
                 fit: BoxFit.fill,
               ),
             );
-          } else if (imageDayController.imageOfTheDay.value.imageUrl.isEmpty) {
+          } else if (imageDayController.imageOfTheDay.value.imageUrlHD.isEmpty) {
             return Center(
                 child: Text('noImageForToday'.tr,
                     style: const TextStyle(fontWeight: FontWeight.bold)));
@@ -134,7 +134,7 @@ class ImageDayPage extends StatelessWidget {
                   height: double.infinity,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: NetworkImage(image.imageUrl),
+                      image: NetworkImage(image.imageUrlHD),
                       fit: BoxFit.cover,
                       colorFilter: ColorFilter.mode(
                         Colors.black.withOpacity(0.5),
@@ -186,7 +186,7 @@ class ImageDayPage extends StatelessWidget {
                                       height: 420.0,
                                       color: Colors.grey[300],
                                       child: Image.network(
-                                        image.imageUrl,
+                                        image.imageUrlHD,
                                         loadingBuilder:
                                             (context, child, progress) {
                                           if (progress == null) {

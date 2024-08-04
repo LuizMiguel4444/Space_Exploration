@@ -21,7 +21,7 @@ class ImageDetailsPage extends StatelessWidget {
     try {
       // Baixe a imagem
       var response = await Dio().get(
-        image.imageUrl,
+        image.imageUrlHD,
         options: Options(responseType: ResponseType.bytes),
       );
 
@@ -90,7 +90,7 @@ class ImageDetailsPage extends StatelessWidget {
             height: double.infinity,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(image.imageUrl),
+                image: NetworkImage(image.imageUrlHD),
                 fit: BoxFit.cover,
                 colorFilter: ColorFilter.mode(
                   Colors.black.withOpacity(0.5),
@@ -141,7 +141,7 @@ class ImageDetailsPage extends StatelessWidget {
                                 height: 420.0,
                                 color: Colors.grey[300],
                                 child: Image.network(
-                                  image.imageUrl,
+                                  image.imageUrlHD,
                                   loadingBuilder: (context, child, progress) {
                                     if (progress == null) {
                                       return child;
@@ -241,7 +241,7 @@ class ImageZoomPage extends StatelessWidget {
                 minScale: 1.0,
                 maxScale: 5.0,
                 child: Image.network(
-                  image.imageUrl,
+                  image.imageUrlHD,
                   fit: BoxFit.contain,
                   errorBuilder: (context, error, stackTrace) {
                     return const Icon(Icons.error, color: Colors.white);
