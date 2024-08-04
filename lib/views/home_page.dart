@@ -7,7 +7,7 @@ import '../controllers/space_controller.dart';
 import '../controllers/navBar_controller.dart';
 import '../controllers/theme_controller.dart';
 import '../controllers/favorite_controller.dart';
-import '../controllers/language_controller.dart';
+//import '../controllers/language_controller.dart';
 import '../data/dataService.dart';
 import '../models/nasa_image.dart';
 import 'image_details_page.dart';
@@ -18,10 +18,8 @@ import 'image_day_page.dart';
 class HomePage extends StatelessWidget {
   final SpaceController controller = Get.put(SpaceController());
   final ThemeController themeController = Get.put(ThemeController());
-  final NotchBottomBarController notchBottomBarController = NotchBottomBarController(index: 1);
-  final void Function(int)? itemSelectedCallback;
-
-  HomePage({super.key, this.itemSelectedCallback});
+  final NavBarController navBarController = Get.put(NavBarController());
+  final AppController appController = Get.find<AppController>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,33 +32,56 @@ class HomePage extends StatelessWidget {
             await Future.delayed(const Duration(seconds: 1));
             await controller.fetchNasaImages();
           },
-          child: controller.isLoading.value || controller.isTranslating.value ? Center(
-            child: Lottie.asset(
-              'assets/loading.json',
-              width: 400,
-              height: 500,
-              fit: BoxFit.fill,
-            ),
-          ) : themeController.isGridLayout.value ? SecundaryLayout() : MainLayout(),
+          child: controller.isLoading.value || controller.isTranslating.value
+            ? Center(
+              child: Lottie.asset(
+                'assets/loading.json',
+                width: 400,
+                height: 500,
+                fit: BoxFit.fill,
+              ),
+            )
+            : ValueListenableBuilder(
+                valueListenable: dataService.tableStateNotifier,
+                builder: (_, value, __) {
+                  if (value['status'] == TableStatus.error) {
+                    return ListView(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: Center(
+                            child: Text("errorLoadingData".tr),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  return Obx(() => themeController.isGridLayout.value ? SecundaryLayout() : MainLayout());
+                },
+              ),
         );
       }),
       extendBody: true,
       bottomNavigationBar: AnimatedNotchBottomBar(
-        notchBottomBarController: notchBottomBarController,
+        notchBottomBarController: appController.notchBottomBarController,
         onTap: (index) async {
           if (navBarController.currentIndex.value == 1 && index == 1) {
             return;
           }
-          navBarController.currentIndex.value = index;
-          itemSelectedCallback?.call(index);
           if (index == 0) {
             await Future.delayed(const Duration(milliseconds: 320));
-            Get.to(() => ImageDayPage());
+            Get.to(() => ImageDayPage())!.then((_) {
+              navBarController.currentIndex.value = 1;
+              appController.notchBottomBarController.jumpTo(1);
+            });
           } else if (index == 1 && Get.currentRoute != '/') {
             Get.offAll(HomePage());
           } else if (index == 2) {
             await Future.delayed(const Duration(milliseconds: 320));
-            Get.to(() => FavoritePage());
+            Get.to(() => FavoritePage())!.then((_) {
+              navBarController.currentIndex.value = 1;
+              appController.notchBottomBarController.jumpTo(1);
+            });
           }
         },
         bottomBarItems: [
@@ -96,6 +117,7 @@ class HomePage extends StatelessWidget {
 class MyNewAppBar extends StatelessWidget implements PreferredSizeWidget {
   final SpaceController spaceController = Get.put(SpaceController());
   final ThemeController themeController = Get.find<ThemeController>();
+  final AppController appController = Get.find<AppController>();
 
   // ignore: use_key_in_widget_constructors
   MyNewAppBar();
@@ -104,85 +126,93 @@ class MyNewAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Theme.of(context).brightness == Brightness.dark ? customSwatchSecundary : customSwatch,
-      leading: IconButton(
-        icon: const Icon(Icons.refresh),
-        color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
-        onPressed: () {
-          spaceController.fetchNasaImages();
-        },
-      ),
-      title: Text(
-        'appTitle'.tr,
-        style: TextStyle(
-          fontStyle: FontStyle.italic,
-          fontWeight: FontWeight.bold,
-          fontSize: 28,
-          color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+      title: Container(
+        //alignment: Alignment.center,
+        padding: const EdgeInsets.only(top: 26),
+        child: Text(
+          'appTitle'.tr,
+          style: TextStyle(
+            fontStyle: FontStyle.italic,
+            fontWeight: FontWeight.bold,
+            fontSize: 22,
+            color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black
+          ),
         ),
       ),
-      centerTitle: true,
       actions: [
-        Obx(() => IconButton(
-          icon: Icon(
-              themeController.isDarkMode.value ? Icons.light_mode : Icons.dark_mode,
-              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
-          onPressed: () {
-            themeController.toggleTheme();
-          },
-        )),
-        Obx(() => IconButton(
-          icon: Icon(
-            themeController.isGridLayout.value ? Icons.list : Icons.grid_on,
-            color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
-          ),
-          onPressed: () {
-            themeController.toggleLayout();
-          },
-        )),
-        PopupMenuButton<String>(
-          onSelected: (String value) async {
-            if (Get.locale?.languageCode == value) {
-              return;
-            }
-            spaceController.isTranslating.value = true;
-            try {
-              if (value == 'en') {
-                Get.updateLocale(const Locale('en', 'US'));
-                Get.find<FavoriteController>().updateLanguage('en');
-                await spaceController.updateLanguage('en');
-              } else if (value == 'pt') {
-                Get.updateLocale(const Locale('pt', 'BR'));
-                Get.find<FavoriteController>().updateLanguage('pt');
-                await spaceController.updateLanguage('pt');
+        Obx(() => Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(top: 20),
+          child: IconButton(
+            icon: Icon(
+                themeController.isDarkMode.value ? Icons.light_mode : Icons.dark_mode,
+                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+            onPressed: () {
+              themeController.toggleTheme();
+            },
+          )),
+        ),
+        Obx(() => Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(top: 20),
+          child: IconButton(
+            icon: Icon(
+              themeController.isGridLayout.value ? Icons.list : Icons.grid_on,
+              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+            ),
+            onPressed: () {
+              themeController.toggleLayout();
+            },
+          )),
+        ),
+        Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.only(top: 20),
+          child: PopupMenuButton<String>(
+            onSelected: (String value) async {
+              if (Get.locale?.languageCode == value) {
+                return;
               }
-              await LanguageService.saveLanguageCode(value);
-            } finally {
-              spaceController.isTranslating.value = false;
-            }
-          },
-          icon: Icon(
-            Icons.language,
-            color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+              spaceController.isTranslating.value = true;
+              try {
+                if (value == 'en') {
+                  Get.updateLocale(const Locale('en', 'US'));
+                  Get.find<FavoriteController>().updateLanguage('en');
+                  await spaceController.updateLanguage('en');
+                } else if (value == 'pt') {
+                  Get.updateLocale(const Locale('pt', 'BR'));
+                  Get.find<FavoriteController>().updateLanguage('pt');
+                  await spaceController.updateLanguage('pt');
+                }
+                //await LanguageService.saveLanguageCode(value);
+              } finally {
+                spaceController.isTranslating.value = false;
+              }
+            },
+            icon: Icon(
+              Icons.language,
+              color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+            ),
+            itemBuilder: (BuildContext context) {
+              return [
+                PopupMenuItem(
+                  value: 'en',
+                  child: Text("english".tr),
+                ),
+                PopupMenuItem(
+                  value: 'pt',
+                  child: Text("portuguese".tr),
+                ),
+              ];
+            },
           ),
-          itemBuilder: (BuildContext context) {
-            return [
-              PopupMenuItem(
-                value: 'en',
-                child: Text("english".tr),
-              ),
-              PopupMenuItem(
-                value: 'pt',
-                child: Text("portuguese".tr),
-              ),
-            ];
-          },
         ),
       ],
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(72);
 }
 
 // ignore: use_key_in_widget_constructors
@@ -212,8 +242,6 @@ class MainLayout extends StatelessWidget {
                 final image = nasaImages[index];
                 final locale = Get.locale?.languageCode ?? 'en';
                 final formattedDate = DateFormat.yMMMMd(locale).format(DateTime.parse(image.date));
-                // ignore: avoid_print
-                print(image.imageUrl);
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
                   shape: RoundedRectangleBorder(
@@ -235,8 +263,7 @@ class MainLayout extends StatelessWidget {
                             if (progress == null) {
                               return child;
                             }
-                            // ignore: sized_box_for_whitespace
-                            return Container(
+                            return SizedBox(
                               width: 100,
                               height: 100,
                               child: Center(
@@ -307,8 +334,6 @@ class SecundaryLayout extends StatelessWidget {
               itemCount: nasaImages.length,
               itemBuilder: (context, index) {
                 final image = nasaImages[index];              
-                // ignore: avoid_print
-                print(image.imageUrl);
                 return GestureDetector(
                   onTap: () {
                     Get.to(() => ImageDetailsPage(image: image));
@@ -359,4 +384,8 @@ class SecundaryLayout extends StatelessWidget {
       },
     );
   }
+}
+
+class AppController extends GetxController {
+  final NotchBottomBarController notchBottomBarController = NotchBottomBarController(index: 1);
 }
