@@ -20,6 +20,11 @@ class Messages extends Translations {
       'noImageForToday': 'No image for today',
       "english": "English",
       "portuguese": "Portuguese",
+      "Image saved to gallery!": "Image saved to gallery!",
+      "Failed to save image.": "Failed to save image.",
+      "Failed to download image.": "Failed to download image.",
+      "Success": "Success",
+      "Error": "Error",
     },
     'pt_BR': {
       'appTitle': 'Exploração Espacial',
@@ -37,6 +42,11 @@ class Messages extends Translations {
       'noImageForToday': 'Não tem imagem para o dia de hoje.',
       "english": "Inglês",
       "portuguese": "Português",
+      "Image saved to gallery!": "Imagem salva na galeria!",
+      "Failed to save image.": "Falha ao salvar a imagem.",
+      "Failed to download image.": "Falha ao baixar a imagem.",
+      "Success": "Sucesso",
+      "Error": "Erro",
     },
   };
 }
