@@ -24,12 +24,12 @@ class FavoriteController extends GetxController {
   }
 
   void removeFavorite(NasaImage image) {
-    favoriteImages.removeWhere((item) => item.imageUrl == image.imageUrl);
+    favoriteImages.removeWhere((item) => item.imageUrlHD == image.imageUrlHD);
     _saveFavorites();
   }
   
   bool isFavorite(NasaImage image) {
-    return favoriteImages.any((item) => item.imageUrl == image.imageUrl);
+    return favoriteImages.any((item) => item.imageUrlHD == image.imageUrlHD);
   }
 
   void _saveFavorites() async {
@@ -68,6 +68,7 @@ class FavoriteController extends GetxController {
         title: translatedTitle,
         date: image.date,
         description: translatedDescription,
+        imageUrlHD: image.imageUrlHD,
         imageUrl: image.imageUrl,
       );
     }

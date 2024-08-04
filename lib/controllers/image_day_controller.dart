@@ -8,6 +8,7 @@ class ImageDayController extends GetxController {
     title: '',
     date: '',
     description: '',
+    imageUrlHD: '',
     imageUrl: '',
   ).obs;
   var isLoading = false.obs;
@@ -31,7 +32,7 @@ class ImageDayController extends GetxController {
         final data = jsonDecode(response.body);
         final fetchedImage = NasaImage.fromJson(data);
 
-        String extension = fetchedImage.imageUrl.split('.').last.toLowerCase();
+        String extension = fetchedImage.imageUrlHD.split('.').last.toLowerCase();
         if (extension == 'png' || extension == 'gif' || extension == 'jpg' || extension == 'jpeg') {
           // Translate the content
           final translatedTitle = await _translateText(fetchedImage.title, Get.locale?.languageCode ?? 'en');
@@ -41,6 +42,7 @@ class ImageDayController extends GetxController {
             title: translatedTitle,
             date: fetchedImage.date,
             description: translatedDescription,
+            imageUrlHD: fetchedImage.imageUrlHD,
             imageUrl: fetchedImage.imageUrl,
           ));
         }

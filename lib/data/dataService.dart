@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -13,7 +11,7 @@ class DataService {
   final ValueNotifier<Map<String, dynamic>> tableStateNotifier =
       ValueNotifier({'status': TableStatus.idle, 'dataObjects': []});
   int _selectedQuantity = 10;
-  final int _batchSize = 5; // Tamanho do lote
+  final int _batchSize = 5;
   final String _googleTranslateApiKey = 'AIzaSyDFOl_kuFleMqKRAnvE8McG6XY2JKcxZVw';
   Map<String, Map<String, String>> _translationCache = {};
 
@@ -44,7 +42,7 @@ class DataService {
       }
 
       var validImages = allNasaImages.where((image) {
-        String extension = image.imageUrl.split('.').last.toLowerCase();
+        String extension = image.imageUrlHD.split('.').last.toLowerCase();
         return extension == 'png' || extension == 'gif' || extension == 'jpg' || extension == 'jpeg';
       }).toList();
 
@@ -109,13 +107,14 @@ class DataService {
       _translationCache.putIfAbsent(image.title, () => {})[targetLanguage] = translatedTitle;
       _translationCache.putIfAbsent(image.description, () => {})[targetLanguage] = translatedDescription;
 
-      await _saveTranslationCache();
+      _saveTranslationCache();
     }
 
     return NasaImage(
       title: translatedTitle,
       date: image.date,
       description: translatedDescription,
+      imageUrlHD: image.imageUrlHD,
       imageUrl: image.imageUrl,
     );
   }

@@ -1,12 +1,14 @@
 class NasaImage {
   final String title;
   final String description;
+  final String imageUrlHD;
   final String imageUrl;
   final String date;
 
   NasaImage({
     required this.title,
     required this.description,
+    required this.imageUrlHD,
     required this.imageUrl,
     required this.date,
   });
@@ -15,7 +17,8 @@ class NasaImage {
     return NasaImage(
       title: json['title'] ?? 'No title',
       description: json['explanation'] ?? 'No description',
-      imageUrl: json['hdurl'] ?? '',
+      imageUrlHD: json['hdurl'] ?? '',
+      imageUrl: json['url'] ?? '',
       date: json['date'] ?? 'No date',
     );
   }
@@ -24,7 +27,8 @@ class NasaImage {
     return {
       'title': title,
       'date': date,
-      'hdurl': imageUrl,
+      'hdurl': imageUrlHD,
+      'url': imageUrl,
       'explanation': description,
     };
   }
@@ -33,6 +37,7 @@ class NasaImage {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     return other is NasaImage &&
+      other.imageUrlHD == imageUrlHD &&
       other.imageUrl == imageUrl &&
       other.title == title &&
       other.date == date &&
@@ -41,7 +46,8 @@ class NasaImage {
 
   @override
   int get hashCode {
-    return imageUrl.hashCode ^
+    return imageUrlHD.hashCode ^
+      imageUrl.hashCode ^
       title.hashCode ^
       date.hashCode ^
       description.hashCode;
