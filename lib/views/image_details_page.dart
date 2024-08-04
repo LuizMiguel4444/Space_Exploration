@@ -3,6 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:dio/dio.dart';
+import 'dart:io';
 import '../models/nasa_image.dart';
 import '../controllers/theme_controller.dart';
 import '../controllers/favorite_controller.dart';
@@ -12,6 +16,34 @@ class ImageDetailsPage extends StatelessWidget {
   final FavoriteController favoriteController = Get.find<FavoriteController>();
 
   ImageDetailsPage({required this.image});
+
+  Future<void> _downloadImage() async {
+    try {
+      // Baixe a imagem
+      var response = await Dio().get(
+        image.imageUrl,
+        options: Options(responseType: ResponseType.bytes),
+      );
+
+      // Obtenha o diretório temporário
+      final tempDir = await getTemporaryDirectory();
+      final file = await File('${tempDir.path}/${image.title}.jpg').create();
+      file.writeAsBytesSync(response.data);
+
+      // Salve a imagem na galeria
+      final result = await ImageGallerySaver.saveFile(file.path);
+      if (result['isSuccess']) {
+        Get.snackbar("Success".tr, "Image saved to gallery!".tr,
+            snackPosition: SnackPosition.TOP);
+      } else {
+        Get.snackbar("Error".tr, "Failed to save image.".tr,
+            snackPosition: SnackPosition.TOP);
+      }
+    } catch (e) {
+      Get.snackbar("Error".tr, "Failed to download image.".tr,
+          snackPosition: SnackPosition.TOP);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +77,10 @@ class ImageDetailsPage extends StatelessWidget {
               },
             );
           }),
+          IconButton(
+            icon: Icon(Icons.download, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+            onPressed: _downloadImage,
+          ),
         ],
       ),
       body: Stack(

@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:dio/dio.dart';
+import 'dart:io';
 import '../controllers/image_day_controller.dart';
 import '../controllers/favorite_controller.dart';
 import '../controllers/navBar_controller.dart';
@@ -13,6 +17,34 @@ import '../views/image_details_page.dart';
 class ImageDayPage extends StatelessWidget {
   final ImageDayController imageDayController = Get.put(ImageDayController());
   final FavoriteController favoriteController = Get.find<FavoriteController>();
+
+  Future<void> _downloadImage(String imageUrl, String imageTitle) async {
+    try {
+      // Baixe a imagem
+      var response = await Dio().get(
+        imageUrl,
+        options: Options(responseType: ResponseType.bytes),
+      );
+
+      // Obtenha o diretório temporário
+      final tempDir = await getTemporaryDirectory();
+      final file = await File('${tempDir.path}/$imageTitle.jpg').create();
+      file.writeAsBytesSync(response.data);
+
+      // Salve a imagem na galeria
+      final result = await ImageGallerySaver.saveFile(file.path);
+      if (result['isSuccess']) {
+        Get.snackbar("Success".tr, "Image saved to gallery!".tr,
+            snackPosition: SnackPosition.TOP);
+      } else {
+        Get.snackbar("Error".tr, "Failed to save image.".tr,
+            snackPosition: SnackPosition.TOP);
+      }
+    } catch (e) {
+      Get.snackbar("Error".tr, "Failed to download image.".tr,
+          snackPosition: SnackPosition.TOP);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,22 +79,30 @@ class ImageDayPage extends StatelessWidget {
               } else {
                 final image = imageDayController.imageOfTheDay.value;
                 bool isFavorite = favoriteController.isFavorite(image);
-                return IconButton(
-                  icon: Icon(
-                    isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: isFavorite
-                        ? Colors.red
-                        : Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white
-                            : Colors.black,
-                  ),
-                  onPressed: () {
-                    if (isFavorite) {
-                      favoriteController.removeFavorite(image);
-                    } else {
-                      favoriteController.addFavorite(image);
-                    }
-                  },
+                return Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: isFavorite
+                            ? Colors.red
+                            : Theme.of(context).brightness == Brightness.dark
+                                ? Colors.white
+                                : Colors.black,
+                      ),
+                      onPressed: () {
+                        if (isFavorite) {
+                          favoriteController.removeFavorite(image);
+                        } else {
+                          favoriteController.addFavorite(image);
+                        }
+                      },
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.download, color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black),
+                      onPressed: () => _downloadImage(image.imageUrl, image.title),
+                    ),
+                  ],
                 );
               }
             }),
