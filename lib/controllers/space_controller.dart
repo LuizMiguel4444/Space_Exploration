@@ -18,9 +18,17 @@ class SpaceController extends GetxController {
   }
 
   Future<void> fetchNasaImages() async {
-    isLoading.value = true;
-    await dataService.carregarNasaImages();
-    isLoading.value = false;
+    try {
+      isLoading.value = true;
+      await dataService.carregarNasaImages();
+    } catch (e) {
+      dataService.tableStateNotifier.value = {
+        'status': TableStatus.error,
+        'message': e.toString()
+      };
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> updateLanguage(String languageCode) async {
