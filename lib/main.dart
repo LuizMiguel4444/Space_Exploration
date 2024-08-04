@@ -22,7 +22,6 @@ void main() async {
   SpaceController spaceController = Get.put(SpaceController());
   await spaceController.fetchNasaImages();
   runApp(MyApp(initialLocale: initialLocale));
-  //runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
