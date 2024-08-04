@@ -7,7 +7,7 @@ import '../controllers/space_controller.dart';
 import '../controllers/navBar_controller.dart';
 import '../controllers/theme_controller.dart';
 import '../controllers/favorite_controller.dart';
-//import '../controllers/language_controller.dart';
+import '../controllers/language_controller.dart';
 import '../data/dataService.dart';
 import '../models/nasa_image.dart';
 import 'image_details_page.dart';
@@ -179,12 +179,13 @@ class MyNewAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Get.updateLocale(const Locale('en', 'US'));
                   Get.find<FavoriteController>().updateLanguage('en');
                   await spaceController.updateLanguage('en');
+                  await LanguageService.saveLanguageCode('en');
                 } else if (value == 'pt') {
                   Get.updateLocale(const Locale('pt', 'BR'));
                   Get.find<FavoriteController>().updateLanguage('pt');
                   await spaceController.updateLanguage('pt');
+                  await LanguageService.saveLanguageCode('pt');
                 }
-                //await LanguageService.saveLanguageCode(value);
               } finally {
                 spaceController.isTranslating.value = false;
               }

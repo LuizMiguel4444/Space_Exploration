@@ -16,11 +16,13 @@ void main() async {
   runApp(const SplashScreen());
   final ThemeController themeController = Get.put(ThemeController());
   await themeController.loadPreferences();
+  Get.put(AppController());
   String? savedLanguageCode = await LanguageService.getLanguageCode();
   Locale initialLocale = Locale(savedLanguageCode ?? 'en', 'US');
   SpaceController spaceController = Get.put(SpaceController());
   await spaceController.fetchNasaImages();
   runApp(MyApp(initialLocale: initialLocale));
+  //runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
