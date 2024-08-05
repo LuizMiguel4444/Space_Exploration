@@ -7,6 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
+import 'package:flutter/services.dart';
 import '../models/nasa_image.dart';
 import '../controllers/theme_controller.dart';
 import '../controllers/favorite_controller.dart';
@@ -222,10 +223,38 @@ class ImageDetailsPage extends StatelessWidget {
   }
 }
 
-class ImageZoomPage extends StatelessWidget {
+class ImageZoomPage extends StatefulWidget {
   final NasaImage image;
 
   const ImageZoomPage({required this.image});
+
+  @override
+  // ignore: library_private_types_in_public_api
+  _ImageZoomPageState createState() => _ImageZoomPageState();
+}
+
+class _ImageZoomPageState extends State<ImageZoomPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Permitir todas as orientações ao entrar na tela
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+  }
+
+  @override
+  void dispose() {
+    // Fixar a orientação para retrato ao sair da tela
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -241,8 +270,8 @@ class ImageZoomPage extends StatelessWidget {
                 minScale: 1.0,
                 maxScale: 5.0,
                 child: Image.network(
-                  image.imageUrlHD,
-                  fit: BoxFit.contain,
+                  widget.image.imageUrlHD,
+                  fit: BoxFit.scaleDown,
                   errorBuilder: (context, error, stackTrace) {
                     return const Icon(Icons.error, color: Colors.white);
                   },
@@ -251,8 +280,8 @@ class ImageZoomPage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 16,
-            left: 16,
+            top: 40,
+            left: 14,
             child: IconButton(
               icon: const Icon(Icons.arrow_back, color: Colors.grey),
               onPressed: () {
