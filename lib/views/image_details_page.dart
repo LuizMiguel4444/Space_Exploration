@@ -8,6 +8,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:photo_view/photo_view.dart';
 import '../models/nasa_image.dart';
 import '../controllers/theme_controller.dart';
 import '../controllers/favorite_controller.dart';
@@ -265,17 +266,31 @@ class _ImageZoomPageState extends State<ImageZoomPage> {
           Center(
             child: Hero(
               tag: 'imageHero',
-              child: InteractiveViewer(
-                panEnabled: true,
-                minScale: 1.0,
-                maxScale: 5.0,
-                child: Image.network(
-                  widget.image.imageUrlHD,
-                  fit: BoxFit.scaleDown,
-                  errorBuilder: (context, error, stackTrace) {
-                    return const Icon(Icons.error, color: Colors.white);
-                  },
+              child: PhotoView(
+                imageProvider: NetworkImage(widget.image.imageUrlHD),
+                backgroundDecoration: const BoxDecoration(
+                  color: Colors.black,
                 ),
+                loadingBuilder: (context, event) {
+                  if (event == null) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  final value = event.cumulativeBytesLoaded / (event.expectedTotalBytes ?? 1);
+                  final percentage = (100 * value).floor();
+                  return Center(
+                    child: Text(
+                      "$percentage%",
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  );
+                },
+                errorBuilder: (context, error, stackTrace) {
+                  return const Center(
+                    child: Icon(Icons.error, color: Colors.white),
+                  );
+                },
+                minScale: PhotoViewComputedScale.contained,
+                maxScale: PhotoViewComputedScale.covered * 4.0,
               ),
             ),
           ),
