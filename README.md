@@ -6,7 +6,7 @@
 </p>
 
 - [📑 Sobre o projeto](#-sobre)
-- [📂 Estrutura do projeto](#-estrutura-de-projeto)
+- [📂 Estrutura do projeto](#-estrutura-do-projeto)
 - [🚀 Iniciando](#-iniciando)
 
 ## 📑 Sobre
@@ -15,34 +15,31 @@ O projeto se trata de um aplicativo que tem como objetivo proporcionar ao usuár
 
 ## 📂 Estrutura do projeto
 ```
-flutter_dex
+Nasa_Project
 ├─ lib
-│  ├─ components
-│  │  ├─ appBar.dart
-│  │  ├─ bottomNavBar.dart
-│  │  ├─ buttomQuiz.dart
-│  │  ├─ buttomRegions.dart
-│  │  └─ homeButtom.dart
-│  ├─ detail
-│  │  ├─ datailPokemon.dart
-│  │  │  └─ pkmView.dart
-│  ├─ homepage
-│  │  ├─ cardView.dart
-│  │  ├─ filterPage.dart
-│  │  └─ homePage.dart
+│  ├─ controllers
+│  │  ├─ favorite_controller.dart
+│  │  ├─ image_day_controller.dart
+│  │  ├─ language_controller.dart
+│  │  ├─ navBar_controller.dart
+│  │  ├─ space_controller.dart
+│  │  └─ theme_controller.dart
+│  │
+│  ├─ data
+│  │  └─ dataService.dart
+│  │
+│  ├─ models
+│  │  └─ nasa_image.dart
+│  │
+│  ├─ views
+│  │  ├─ favorite_page.dart
+│  │  ├─ home_page.dart
+│  │  ├─ image_day_page.dart
+│  │  └─ image_details_page.dart
+│  │
 │  ├─ main.dart
-│  ├─ quiz
-│  │  ├─ quizView.dart
-│  │  └─ telaQuiz.dart
-│  ├─ search
-│  │  ├─ SearchInput.dart
-│  │  └─ telaSearch.dart
-│  └─ utils
-│     ├─ captalize.dart
-│     ├─ colors.dart
-│     ├─ dexfonts.dart
-│     ├─ loading.dart
-│     └─ search.dart
+│  └─ translations.dart
+│
 ├─ pubspec.lock
 └─ pubspec.yaml
 
