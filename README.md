@@ -1,4 +1,4 @@
-<h1 align="center">Nasa_Project</h1>
+<h1 align="center">Space_Exploration</h1>
 
 <p align="center">
     <img src="https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white"/>
@@ -15,7 +15,7 @@ O projeto se trata de um aplicativo que tem como objetivo proporcionar ao usuár
 
 ## 📂 Estrutura do projeto
 ```
-Nasa_Project
+Space_Exploration
 ├─ lib
 │  ├─ controllers
 │  │  ├─ favorite_controller.dart
@@ -49,10 +49,10 @@ Nasa_Project
 ## 🚀 Iniciando
 
 ### Passo 1: Clone o repositório
-```git clone https://github.com/LuizMiguel4444/Mini_Projeto_Poo1```
+```git clone https://github.com/LuizMiguel4444/Space_Exploration```
 
 ### Passo 2: Navegue até o repositório
-```cd Mini_Projeto_Poo1```
+```cd Space_Exploration```
 
 ### Passo 3: Baixe as dependências necessárias
 ```flutter pub get```
