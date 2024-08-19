@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
@@ -29,76 +27,47 @@ class _HomePageState extends State<HomePage> {
   final ThemeController themeController = Get.put(ThemeController());
   final NavBarController navBarController = Get.put(NavBarController());
   final AppController appController = Get.find<AppController>();
-  Timer? _timer;
-
-  @override
-  void initState() {
-    super.initState();
-    setFullscreen();
-    startAutoHideTimer();
-  }
-
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
-  }
-
-  void setFullscreen() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack);
-  }
-
-  void startAutoHideTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
-      setFullscreen();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     // ignore: prefer_typing_uninitialized_variables
     return Scaffold(
       appBar: MyNewAppBar(),
-      body: GestureDetector(
-        onTap: () {
-          setFullscreen();
-        },
-        child: Obx(() {
-          return RefreshIndicator(
-            onRefresh: () async {
-              await Future.delayed(const Duration(seconds: 1));
-              await controller.fetchNasaImages();
-            },
-            child: controller.isLoading.value || controller.isTranslating.value
-              ? Center(
-                child: Lottie.asset(
-                  'assets/loading.json',
-                  width: 400,
-                  height: 500,
-                  fit: BoxFit.fill,
-                ),
-              )
-              : ValueListenableBuilder(
-                  valueListenable: dataService.tableStateNotifier,
-                  builder: (_, value, __) {
-                    if (value['status'] == TableStatus.error) {
-                      return ListView(
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.8,
-                            child: Center(
-                              child: Text("errorLoadingData".tr),
-                            ),
+      body: Obx(() {
+        return RefreshIndicator(
+          onRefresh: () async {
+            await Future.delayed(const Duration(seconds: 1));
+            await controller.fetchNasaImages();
+          },
+          child: controller.isLoading.value || controller.isTranslating.value
+            ? Center(
+              child: Lottie.asset(
+                'assets/loading.json',
+                width: 400,
+                height: 500,
+                fit: BoxFit.fill,
+              ),
+            )
+            : ValueListenableBuilder(
+                valueListenable: dataService.tableStateNotifier,
+                builder: (_, value, __) {
+                  if (value['status'] == TableStatus.error) {
+                    return ListView(
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.8,
+                          child: Center(
+                            child: Text("errorLoadingData".tr),
                           ),
-                        ],
-                      );
-                    }
-                    return Obx(() => themeController.isGridLayout.value ? SecundaryLayout() : MainLayout());
-                  },
-                ),
-          );
-        }),
-      ),
+                        ),
+                      ],
+                    );
+                  }
+                  return Obx(() => themeController.isGridLayout.value ? SecundaryLayout() : MainLayout());
+                },
+              ),
+        );
+      }),
       extendBody: true,
       bottomNavigationBar: AnimatedNotchBottomBar(
         notchBottomBarController: appController.notchBottomBarController,
