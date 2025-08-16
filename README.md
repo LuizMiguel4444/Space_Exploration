@@ -1,3 +1,5 @@
+<h1 align="center">⚠️ App temporariamente sem funcionar devido API da NASA estar fora do ar!</h1>
+
 <h1 align="center">🚀 Space_Exploration</h1>
 
 <p align="center">
