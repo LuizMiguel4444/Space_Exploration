@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import '../controllers/image_day_controller.dart';
@@ -32,7 +32,7 @@ class ImageDayPage extends StatelessWidget {
       file.writeAsBytesSync(response.data);
 
       // Salve a imagem na galeria
-      final result = await ImageGallerySaver.saveFile(file.path);
+      final result = await ImageGallerySaverPlus.saveFile(file.path);
       if (result['isSuccess']) {
         Get.snackbar("Success".tr, "Image saved to gallery!".tr,
             snackPosition: SnackPosition.TOP);

@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.nasa_project.app-mergeDebugResources-25:/values-night-v31/values-night-v31.xml",
+            "outputFile": "com.example.nasa_project.app-mergeDebugResources-24:/values-night-v31/values-night-v31.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\luizm\\OneDrive\\Documentos\\Programas\\Space_Exploration\\Space_Exploration\\android\\app\\src\\main\\res\\values-night-v31\\styles.xml",
+                    "source": "C:\\Users\\luizm\\Downloads\\Space_Exploration\\Space_Exploration\\android\\app\\src\\main\\res\\values-night-v31\\styles.xml",
                     "from": {
                         "startLines": "3,15",
                         "startColumns": "4,4",

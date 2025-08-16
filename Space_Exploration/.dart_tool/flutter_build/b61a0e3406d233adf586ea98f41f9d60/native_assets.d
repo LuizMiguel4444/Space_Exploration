@@ -1,1 +1,0 @@
- C:\\Users\\luizm\\OneDrive\\Documentos\\Programas\\Space_Exploration\\Space_Exploration\\.dart_tool\\flutter_build\\b61a0e3406d233adf586ea98f41f9d60\\native_assets.yaml: 
