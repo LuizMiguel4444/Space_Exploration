@@ -1,61 +1,62 @@
-<h1 align="center">Space_Exploration</h1>
+<h1 align="center">🚀 Space_Exploration</h1>
 
 <p align="center">
     <img src="https://img.shields.io/badge/dart-%230175C2.svg?style=for-the-badge&logo=dart&logoColor=white"/>
     <img src="https://img.shields.io/badge/Flutter-%2302569B.svg?style=for-the-badge&logo=Flutter&logoColor=white"/>
 </p>
 
-- [📑 Sobre o projeto](#-sobre)
-- [📂 Estrutura do projeto](#-estrutura-do-projeto)
-- [🚀 Iniciando](#-iniciando)
 
-## 📑 Sobre
-Projeto desenvolvido para a disciplina de Poo do curso de Sistemas de Informação.
-O projeto se trata de um aplicativo que tem como objetivo proporcionar ao usuário a oportunidade de observar e ver detalhes a cerca de dados disponibilizados pela Nasa a partir da [api](https://apod.nasa.gov/apod/astropix.html). O aplicativo apresenta diversas imagens do universo ao usuário, bem como detalhes e a possibilidade de favoritar, fazer download e explorar cada uma delas. O código fonte foi desenvolvido utilizando a linguagem dart e o framework Flutter.
+**Space Exploration** é um aplicativo interativo que apresenta imagens e informações fascinantes sobre o universo. Explore buracos negros, nebulosas, cometas e missões espaciais com uma interface moderna e intuitiva.
 
-## 📂 Estrutura do projeto
-```
-Space_Exploration
-├─ lib
-│  ├─ controllers
-│  │  ├─ favorite_controller.dart
-│  │  ├─ image_day_controller.dart
-│  │  ├─ language_controller.dart
-│  │  ├─ navBar_controller.dart
-│  │  ├─ space_controller.dart
-│  │  └─ theme_controller.dart
-│  │
-│  ├─ data
-│  │  └─ dataService.dart
-│  │
-│  ├─ models
-│  │  └─ nasa_image.dart
-│  │
-│  ├─ views
-│  │  ├─ favorite_page.dart
-│  │  ├─ home_page.dart
-│  │  ├─ image_day_page.dart
-│  │  └─ image_details_page.dart
-│  │
-│  ├─ main.dart
-│  └─ translations.dart
-│
-├─ pubspec.lock
-└─ pubspec.yaml
+---
 
-```
+## 📸 Captura de Tela
 
+![Space Exploration Screenshot](https://github.com/LuizMiguel4444/Space_Exploration/blob/main/spaceExploration.jpg?raw=true)
 
-## 🚀 Iniciando
+---
 
-### Passo 1: Clone o repositório
-```git clone https://github.com/LuizMiguel4444/Space_Exploration```
+## 📱 Funcionalidades
 
-### Passo 2: Navegue até o repositório
-```cd Space_Exploration```
+- Visualize imagens astronômicas impressionantes.
+- Explore tópicos como buracos negros, cometas, nebulosas e missões espaciais.
+- Interface intuitiva e otimizada para fácil navegação.
+- Suporte a modo claro/escuro.
+- Possibilidade de favoritar e baixar imagens.
 
-### Passo 3: Baixe as dependências necessárias
-```flutter pub get```
+---
 
-### Passo 4: Execute o projeto: 
-```flutter run```
+## 📥 Download
+
+Você pode baixar a versão de instalação do app no GitHub Releases:
+[📦 Download APK v1.0.0](https://github.com/LuizMiguel4444/Space_Exploration/releases/tag/v1.0.0)
+
+---
+
+## Como usar
+
+1. Instale o APK no seu dispositivo Android.  
+2. Abra o aplicativo e explore as imagens disponíveis.  
+3. Navegue pelos diferentes temas como buracos negros, nebulosas e cometas.  
+4. Ative ou desative o modo escuro conforme sua preferência.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+- **Dart/Flutter** — Linguagem principal do app.
+- **API da NASA** — Fonte das imagens e dados astronômicos.
+- **GitHub** — Versionamento e distribuição do APK.
+
+---
+
+## Contribuição
+
+Contribuições são bem-vindas!  
+Para contribuir, faça um fork do repositório, crie uma branch com suas alterações e envie um pull request.
+
+---
+
+## Licença
+
+Este projeto está sob a licença MIT.
